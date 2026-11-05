@@ -193,7 +193,7 @@ export default function DriverPortal() {
                 <strong style={{ color: '#818cf8' }}>{item.trackingId}</strong>
                 <span style={{ marginLeft: '10px', background: '#4338ca', padding: '2px 8px', borderRadius: '4px', fontSize: '11px' }}>{item.status}</span>
                 <p style={{ margin: '5px 0', fontSize: '13px' }}><strong>Receiver:</strong> {item.receiverName} ({item.receiverPhone})</p>
-                <p style={{ margin: '0', fontSize: '12px', color: '#c7d2fe' }}>Address: {item.receiverAddress} - {item.receiverPincode}</p>
+                <p style={{ margin: '0', fontSize: '12px', color: '#c7d2fe' }}>Address: {item.receiverAddress}, {item.receiverPincode}</p>
               </div>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <select defaultValue={item.status} id={`driver-status-${item.trackingId}`} style={{ padding: '8px', background: '#312e81', color: '#fff', border: 'none', borderRadius: '4px' }}>

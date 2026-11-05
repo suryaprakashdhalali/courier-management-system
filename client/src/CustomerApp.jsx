@@ -6,9 +6,11 @@ export default function CustomerApp() {
   const [userName, setUserName] = useState(() => localStorage.getItem('customerName') || '');
 
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authName, setAuthName] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   // Booking Form State
   const [senderName, setSenderName] = useState('');
@@ -121,6 +123,28 @@ export default function CustomerApp() {
         setMessage('');
       } else {
         setMessage(data.error || 'Invalid credentials.');
+      }
+    } catch (err) {
+      setMessage('Server connection error.');
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:5000/api/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role: 'customer', email: authEmail, newPassword })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMessage('Password updated successfully! You can now log in.');
+        setIsForgotPassword(false);
+        setAuthPassword('');
+        setNewPassword('');
+      } else {
+        setMessage(data.error || 'Failed to reset password.');
       }
     } catch (err) {
       setMessage('Server connection error.');
@@ -240,36 +264,64 @@ export default function CustomerApp() {
     return (
       <div style={{ fontFamily: 'Arial, sans-serif', maxWidth: '420px', margin: '80px auto', padding: '30px', background: '#f9f9f9', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
         <h1 style={{ color: '#2c3e50', textAlign: 'center', fontSize: '22px' }}>SHREE VENKATESA COURIER SERVICE</h1>
-        <p style={{ textAlign: 'center', color: '#7f8c8d', fontSize: '13px', marginBottom: '20px' }}>Customer Portal Login</p>
+        <p style={{ textAlign: 'center', color: '#7f8c8d', fontSize: '13px', marginBottom: '20px' }}>
+          {isForgotPassword ? 'Reset Customer Password' : 'Customer Portal Login'}
+        </p>
 
         {message && <div style={{ background: '#e8f4f8', padding: '10px', marginBottom: '15px', borderRadius: '4px', color: '#2980b9', textAlign: 'center', fontSize: '13px' }}>{message}</div>}
 
-        <form onSubmit={isRegistering ? handleRegister : handleLogin}>
-          {isRegistering && (
+        {isForgotPassword ? (
+          <form onSubmit={handleResetPassword}>
             <div style={{ marginBottom: '12px' }}>
-              <label style={{ display: 'block', marginBottom: '3px', fontWeight: 'bold', fontSize: '13px' }}>Full Name:</label>
-              <input type="text" value={authName} onChange={(e) => setAuthName(e.target.value)} required style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
+              <label style={{ display: 'block', marginBottom: '3px', fontWeight: 'bold', fontSize: '13px' }}>Email Address:</label>
+              <input type="email" value={authEmail} onChange={(e) => setAuthEmail(e.target.value)} required style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
             </div>
-          )}
-          <div style={{ marginBottom: '12px' }}>
-            <label style={{ display: 'block', marginBottom: '3px', fontWeight: 'bold', fontSize: '13px' }}>Email Address:</label>
-            <input type="email" value={authEmail} onChange={(e) => setAuthEmail(e.target.value)} required style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
-          </div>
-          <div style={{ marginBottom: '15px' }}>
-            <label style={{ display: 'block', marginBottom: '3px', fontWeight: 'bold', fontSize: '13px' }}>Password:</label>
-            <input type="password" value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} required style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
-          </div>
-          <button type="submit" style={{ background: '#2980b9', color: '#fff', border: 'none', padding: '10px 15px', borderRadius: '4px', cursor: 'pointer', width: '100%', fontWeight: 'bold' }}>
-            {isRegistering ? 'Register Account' : 'Secure Login'}
-          </button>
-        </form>
+            <div style={{ marginBottom: '15px' }}>
+              <label style={{ display: 'block', marginBottom: '3px', fontWeight: 'bold', fontSize: '13px' }}>New Password:</label>
+              <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
+            </div>
+            <button type="submit" style={{ background: '#e67e22', color: '#fff', border: 'none', padding: '10px 15px', borderRadius: '4px', cursor: 'pointer', width: '100%', fontWeight: 'bold' }}>
+              Update Password
+            </button>
+            <p style={{ textAlign: 'center', marginTop: '15px', fontSize: '14px', color: '#555' }}>
+              Remembered your password?{' '}
+              <span onClick={() => { setIsForgotPassword(false); setMessage(''); }} style={{ color: '#2980b9', cursor: 'pointer', fontWeight: 'bold' }}>
+                Login here
+              </span>
+            </p>
+          </form>
+        ) : (
+          <>
+            <form onSubmit={isRegistering ? handleRegister : handleLogin}>
+              {isRegistering && (
+                <div style={{ marginBottom: '12px' }}>
+                  <label style={{ display: 'block', marginBottom: '3px', fontWeight: 'bold', fontSize: '13px' }}>Full Name:</label>
+                  <input type="text" value={authName} onChange={(e) => setAuthName(e.target.value)} required style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
+                </div>
+              )}
+              <div style={{ marginBottom: '12px' }}>
+                <label style={{ display: 'block', marginBottom: '3px', fontWeight: 'bold', fontSize: '13px' }}>Email Address:</label>
+                <input type="email" value={authEmail} onChange={(e) => setAuthEmail(e.target.value)} required style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
+              </div>
+              <div style={{ marginBottom: '15px' }}>
+                <label style={{ display: 'block', marginBottom: '3px', fontWeight: 'bold', fontSize: '13px' }}>Password:</label>
+                <input type="password" value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} required style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
+              </div>
+              <button type="submit" style={{ background: '#2980b9', color: '#fff', border: 'none', padding: '10px 15px', borderRadius: '4px', cursor: 'pointer', width: '100%', fontWeight: 'bold' }}>
+                {isRegistering ? 'Register Account' : 'Secure Login'}
+              </button>
+            </form>
 
-        <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '14px', color: '#555' }}>
-          {isRegistering ? 'Already registered?' : "Don't have an account?"}{' '}
-          <span onClick={() => { setIsRegistering(!isRegistering); setMessage(''); }} style={{ color: '#2980b9', cursor: 'pointer', fontWeight: 'bold' }}>
-            {isRegistering ? 'Login here' : 'Register here'}
-          </span>
-        </p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '15px', fontSize: '13px' }}>
+              <span onClick={() => { setIsForgotPassword(true); setMessage(''); }} style={{ color: '#e67e22', cursor: 'pointer', fontWeight: 'bold' }}>
+                Forgot Password?
+              </span>
+              <span onClick={() => { setIsRegistering(!isRegistering); setMessage(''); }} style={{ color: '#2980b9', cursor: 'pointer', fontWeight: 'bold' }}>
+                {isRegistering ? 'Login here' : 'Register here'}
+              </span>
+            </div>
+          </>
+        )}
       </div>
     );
   }
@@ -403,7 +455,7 @@ export default function CustomerApp() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', fontSize: '13px', gap: '10px' }}>
                   <div>
                     <p style={{ margin: '2px 0' }}><strong>Receiver:</strong> {item.receiverName} ({item.receiverPhone})</p>
-                    <p style={{ margin: '2px 0' }}><strong>Address:</strong> {item.receiverAddress} - {item.receiverPincode}</p>
+                    <p style={{ margin: '2px 0' }}><strong>Address:</strong> {item.receiverAddress}, {item.receiverPincode}</p>
                   </div>
                   <div>
                     <p style={{ margin: '2px 0' }}><strong>Item:</strong> {item.itemDescription} ({item.weight} kg)</p>
