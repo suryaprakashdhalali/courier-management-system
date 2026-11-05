@@ -60,7 +60,7 @@ export default function CustomerApp() {
 
   const fetchShipments = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/shipments?email=${userEmail}`);
+      const res = await fetch(`https://courier-management-system-re99.onrender.com/api/shipments?email=${userEmail}`);
       const data = await res.json();
       if (res.ok) setCustomerShipments(data);
     } catch (err) {
@@ -70,7 +70,7 @@ export default function CustomerApp() {
 
   const fetchChats = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/support/chats?email=${userEmail}`);
+      const res = await fetch(`https://courier-management-system-re99.onrender.com/api/support/chats?email=${userEmail}`);
       const data = await res.json();
       if (res.ok) {
         setChats(data);
@@ -86,7 +86,7 @@ export default function CustomerApp() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/register', {
+      const res = await fetch('https://courier-management-system-re99.onrender.com/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: authName, email: authEmail, password: authPassword })
@@ -107,7 +107,7 @@ export default function CustomerApp() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/login', {
+      const res = await fetch('https://courier-management-system-re99.onrender.com/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: authEmail, password: authPassword })
@@ -132,7 +132,7 @@ export default function CustomerApp() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/reset-password', {
+      const res = await fetch('https://courier-management-system-re99.onrender.com/api/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role: 'customer', email: authEmail, newPassword })
@@ -163,7 +163,7 @@ export default function CustomerApp() {
   const handleBookShipment = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/shipments', {
+      const res = await fetch('https://courier-management-system-re99.onrender.com/api/shipments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -193,7 +193,7 @@ export default function CustomerApp() {
   const handleTrack = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/shipments/${trackingId}`);
+      const res = await fetch(`https://courier-management-system-re99.onrender.com/api/shipments/${trackingId}`);
       const data = await res.json();
       if (res.ok) {
         setSearchedShipment(data);
@@ -212,7 +212,7 @@ export default function CustomerApp() {
     if (!currentInput.trim()) return;
 
     try {
-      const res = await fetch('http://localhost:5000/api/support/chat', {
+      const res = await fetch('https://courier-management-system-re99.onrender.com/api/support/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -240,7 +240,8 @@ export default function CustomerApp() {
   const handleFeedbackSubmit = async (trk, e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/shipments/${trk}/feedback`, {
+      const res = await fetch(`https://courier-management-
+system-re99.onrender.com/api/shipments/${trk}/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ rating: Number(feedbackRating), comment: feedbackComment })

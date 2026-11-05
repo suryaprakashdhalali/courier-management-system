@@ -24,7 +24,8 @@ export default function DriverPortal() {
 
   const fetchDriverDeliveries = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/shipments?driverRider=Ramesh Rider`);
+      const res = await fetch(`https://courier-management-
+system-re99.onrender.com/api/shipments?driverRider=Ramesh Rider`);
       const data = await res.json();
       if (res.ok) setAssignedShipments(data);
     } catch (err) {
@@ -40,7 +41,7 @@ export default function DriverPortal() {
         const { latitude, longitude } = position.coords;
         assignedShipments.forEach(async (item) => {
           if (['Picked Up', 'In Transit', 'Out for Delivery'].includes(item.status)) {
-            await fetch(`http://localhost:5000/api/driver/shipments/${item.trackingId}`, {
+            await fetch(`https://courier-management-system-re99.onrender.com/api/driver/shipments/${item.trackingId}`, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ lat: latitude, lng: longitude })
@@ -56,7 +57,7 @@ export default function DriverPortal() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/driver/login', {
+      const res = await fetch('https://courier-management-system-re99.onrender.com/api/driver/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: driverEmail, password: driverPassword })
@@ -76,7 +77,7 @@ export default function DriverPortal() {
 
   const handleStatusUpdate = async (trackingId, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/driver/shipments/${trackingId}`, {
+      const res = await fetch(`https://courier-management-system-re99.onrender.com/api/driver/shipments/${trackingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -93,7 +94,7 @@ export default function DriverPortal() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/reset-password', {
+      const res = await fetch('https://courier-management-system-re99.onrender.com/api/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role: resetRole, email: resetEmail, newPassword })

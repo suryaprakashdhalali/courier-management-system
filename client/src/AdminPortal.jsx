@@ -31,7 +31,7 @@ export default function AdminPortal() {
   const fetchAdminData = async (startDate = '', endDate = '') => {
     try {
       setRefreshing(true);
-      let url = 'http://localhost:5000/api/admin/analytics';
+      let url = 'https://courier-management-system-re99.onrender.com/api/admin/analytics';
       if (startDate && endDate) {
         url += `?startDate=${startDate}&endDate=${endDate}`;
       }
@@ -40,7 +40,7 @@ export default function AdminPortal() {
       const data = await res.json();
       if (res.ok) setAnalytics(data);
 
-      const shipRes = await fetch('http://localhost:5000/api/shipments');
+      const shipRes = await fetch('https://courier-management-system-re99.onrender.com/api/shipments');
       const shipData = await shipRes.json();
       if (shipRes.ok) setAllShipments(shipData);
     } catch (err) {
@@ -53,7 +53,7 @@ export default function AdminPortal() {
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/admin/login', {
+      const res = await fetch('https://courier-management-system-re99.onrender.com/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: adminEmail, password: adminPassword })
@@ -79,7 +79,7 @@ export default function AdminPortal() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/reset-password', {
+      const res = await fetch('https://courier-management-system-re99.onrender.com/api/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role: resetRole, email: resetEmail, newPassword })
@@ -101,7 +101,8 @@ export default function AdminPortal() {
 
   const handleAdminUpdate = async (trk, newStatus, rider) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/shipments/${trk}`, {
+      const res = await fetch(`https://courier-management-
+system-re99.onrender.com/api/admin/shipments/${trk}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, assignedRider: rider })
@@ -120,7 +121,8 @@ export default function AdminPortal() {
     if (!adminReplyText.trim() || !selectedChat) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/support/chats/${selectedChat._id}`, {
+      const res = await fetch(`https://courier-management-
+system-re99.onrender.com/api/admin/support/chats/${selectedChat._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ adminReply: adminReplyText, status: 'In Progress' })
